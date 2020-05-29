@@ -73,6 +73,15 @@ let current = theTetrominoes[random][0]
 
   timerId = setInterval(moveDown, 1000)
 
+  //assign functions to keyCodes
+  function control(e){
+    if (e.keyCode === 37){
+      moveLeft()
+    }
+  }
+
+  document.addEventListener('keyup', control)
+
   // move down function
   function moveDown () {
     undraw()
@@ -81,7 +90,7 @@ let current = theTetrominoes[random][0]
     freeze()
   }
 
-// freeze statement
+// freeze function
 function freeze() {
   if (current.some(index => squares[currentPosition + index + width].classList.contains('taken'))) {
     current.forEach(index => squares[currentPosition + index].classList.add('taken'))
@@ -91,6 +100,20 @@ function freeze() {
     currentPosition = 4
     draw()
   }
+}
+
+// move the tetromino left, unless is at the edge or there is a blockage
+function moveLeft() {
+  undraw()
+  const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0)
+
+  if (!isAtLeftEdge) currentPosition -=1
+
+  if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+    currentPosition += 1
+  }
+
+  draw()
 }
 
 })
